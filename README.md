@@ -12,7 +12,7 @@ by Ying Yang1∗, De Cheng1∗†, Chaowei Fang1∗†, Yubiao Wang, Changzhe Ji
 Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain data by learning only from unlabeled In-Distribution (ID) training samples, which is crucial for developing a safe real-world machine learning system. Current reconstruction-based method provides a good alternative approach, by measuring the reconstruction error between the input and its corresponding generative counterpart in the pixel/feature space. However, such generative methods face the key dilemma, $i.e.$, *improving the reconstruction power of the generative model, while keeping compact representation of the ID data.* To address this issue, we propose the diffusion-based layer-wise semantic reconstruction approach for unsupervised OOD detection. The innovation of our approach is that we leverage the diffusion model's intrinsic data reconstruction ability to distinguish ID samples from OOD samples in the latent feature space. Moreover, to set up a comprehensive and discriminative feature representation, we devise a multi-layer semantic feature extraction strategy. Through distorting the extracted features with Gaussian noises and applying the diffusion model for feature reconstruction, the separation of ID and OOD samples is implemented according to the reconstruction errors. Extensive experimental results on multiple benchmarks built upon various datasets demonstrate that our method achieves state-of-the-art performance in terms of detection accuracy and speed.
 
 ## Citation
-
+ ```sh
 @article{yang2024diffusion,
   title={Diffusion-based Layer-wise Semantic Reconstruction for Unsupervised Out-of-Distribution Detection},
   author={Yang, Ying and Cheng, De and Fang, Chaowei and Wang, Yubiao and Jiao, Changzhe and Cheng, Lechao and Wang, Nannan},
@@ -49,5 +49,66 @@ To train a model on datasets such as CIFAR10:
    If you wish to utilize multiple GPUs, you can use torchrun as follows:
    ```bash
    torchrun --nproc_per_node=<number_of_gpus> main.py --config config/Config.yaml --data_path ./data
+
+To evaluate the model for out-of-distribution (OOD) detection using datasets like CIFAR10, follow these steps:
+
+### 1. **Download the Pre-trained Checkpoint**
+
+- Download the pre-trained model checkpoint from [this link](your-pretrained-weight-link) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
+
+### 2. **Prepare OOD Datasets**
+
+- Download the OOD datasets from [this link](your-dataset-link).
+- Extract and place the datasets inside the `data` folder in your current project directory.
+- The dataset paths need to be specified as follows in the configuration:
+  - CIFAR100: Default will be downloaded automatically.
+  - iSUN: `/data/iSUN`
+  - SVHN: `/data/SVHN`
+  - LSUN: `/data/LSUN`
+  - LSUN (resized): `/data/LSUN_resize`
+  - DTD (Describable Textures Dataset): `/data/dtd/images`
+  - Places365: `/data/places365`
+
+Ensure you adjust these paths in `main.py` where the datasets are being loaded.
+
+```python
+# Example Paths to Set
+dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
+dataset_test1 = datasets.ImageFolder(root='./data/iSUN', transform=transform_train)
+dataset_test2 = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=transform_train)
+dataset_test3 = datasets.ImageFolder(root='./data/LSUN', transform=transform_train)
+dataset_test4 = datasets.ImageFolder(root='./data/LSUN_resize', transform=transform_train)
+dataset_test5 = datasets.ImageFolder(root='./data/dtd/images', transform=transform_train)
+dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
+```
+
+### 3. **Run the Evaluation Script**
+
+To evaluate the model, use the `main.py` script as follows:
+
+- Make sure to specify the LDM checkpoint (`--pretrained_ldm_ckpt`) and configuration (`--pretrained_ldm_cfg`):
+
+  ```bash
+  python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate
+  ```
+
+- You can choose to calculate OOD detection metrics using either **MSE** or **MFsim**. To do so, specify `--similarity_type`:
+
+  - To use **MSE**:
+    ```bash
+    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MSE
+    ```
+  - To use **MFsim**:
+    ```bash
+    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+    ```
+- To evaluate the model using the **LR** metric, you need to specify both the initial (--pretrained_ldm_ckpt_first) and the end (--pretrained_ldm_ckpt_end) pre-trained checkpoints, as well as the configuration file:
+  ```bash
+  python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg 
+  config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+  ```
+
+
+
 
    
