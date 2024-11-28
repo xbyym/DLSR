@@ -5,5 +5,5 @@ This is the official repo for
 
 by Ying Yang1∗, De Cheng1∗†, Chaowei Fang1∗†, Yubiao Wang, Changzhe Jiao, Lechao Cheng, Nannan Wang, Xinbo Gao
 
-![5-21g1](5-21g1.pdf)
+![description](./5-21g1_00.png)
 
