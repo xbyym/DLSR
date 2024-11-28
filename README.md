@@ -38,7 +38,7 @@ To ensure compatibility and reproduce the results, please set up your environmen
 ### To Train a Model on Datasets such as CIFAR10:
 
 1. **Download the Pre-Trained Checkpoint**  
-   Please download the `efficientnet-b4-6ed6700e.pth` file from [this link](your-pan-link-here) and place it in the current project directory.
+   Please download the `efficientnet-b4-6ed6700e.pth` file from [this link](https://drive.google.com/file/d/1yAQbBQQtiMvhDYWuXTXdGv5uE9enDdKD/view?usp=drive_link) and place it in the current project directory.
 
 2. **Run the Training Script**  
    You can start training by running the `main.py` script:
