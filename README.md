@@ -3,8 +3,6 @@ This is the official repo for
 
 [Diffusion-based Multi-layer Semantic Reconstruction for Unsupervised Out-of-Distribution Detection (NeurIPS 2024)](https://arxiv.org/abs/2411.10701)
 
-by Ying Yang1∗, De Cheng1∗†, Chaowei Fang1∗†, Yubiao Wang, Changzhe Jiao, Lechao Cheng, Nannan Wang, Xinbo Gao
-
 ![description](./5-21g1_00.png)
 
 ## Abstract
@@ -109,6 +107,10 @@ To evaluate the model, use the `main.py` script as follows:
   python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg 
   config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
   ```
+## Acknowledgement
+
+This code is primarily based on modifications made from [latent-diffusion](https://github.com/CompVis/latent-diffusion) and [UniAD](https://github.com/zhiyuanyou/UniAD). We would like to express our gratitude to the authors of these repositories for their excellent foundational work, which significantly inspired and supported our research. Their contributions have been invaluable in the development of this project.
+
 
 
 
