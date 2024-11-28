@@ -57,7 +57,7 @@ To ensure compatibility and reproduce the results, please set up your environmen
 ### To Evaluate the Model for Out-of-Distribution (OOD) Detection:
 
 1. **Download the Pre-Trained Checkpoint**  
-   Download the pre-trained model checkpoint from [this link](your-pretrained-weight-link) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
+   Download the pre-trained model checkpoint from [this link]([your-pretrained-weight-link](https://drive.google.com/file/d/1yAQbBQQtiMvhDYWuXTXdGv5uE9enDdKD/view?usp=drive_link)) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
 
 2. **Prepare OOD Datasets**  
    - Download the OOD datasets from [this link](your-dataset-link).
