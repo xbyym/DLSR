@@ -51,7 +51,7 @@ To train a model on datasets such as CIFAR10:
    If you wish to utilize multiple GPUs, you can use torchrun as follows:
    ```bash
    torchrun --nproc_per_node=<number_of_gpus> main.py --config config/Config.yaml --data_path ./data
-  ```
+   ```
 To evaluate the model for out-of-distribution (OOD) detection using datasets like CIFAR10, follow these steps:
 
 ### 1. **Download the Pre-trained Checkpoint**
