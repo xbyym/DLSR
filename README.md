@@ -19,7 +19,7 @@ Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain 
   journal={arXiv preprint arXiv:2411.10701},
   year={2024}
 }
-
+ ```
 ## Environment
 
 To ensure compatibility and reproduce the results, please set up your environment using the provided `environment.txt` file.
@@ -30,9 +30,11 @@ To ensure compatibility and reproduce the results, please set up your environmen
 2. Create a new environment and install the dependencies using the `environment.txt` file:
    ```sh
    conda create --name <your_environment_name> --file environment.txt
+   ```
 3. Activate the newly created environment:
+   ```sh
    conda activate <your_environment_name>
-
+   ```
 ## Usage
 
 To train a model on datasets such as CIFAR10:
@@ -44,12 +46,12 @@ To train a model on datasets such as CIFAR10:
    You can start training by running the `main.py` script:
    ```bash
    python main.py --config config/Config.yaml --data_path ./data
-
+   ```
 3. **Multi-GPU Trainin**:
    If you wish to utilize multiple GPUs, you can use torchrun as follows:
    ```bash
    torchrun --nproc_per_node=<number_of_gpus> main.py --config config/Config.yaml --data_path ./data
-
+  ```
 To evaluate the model for out-of-distribution (OOD) detection using datasets like CIFAR10, follow these steps:
 
 ### 1. **Download the Pre-trained Checkpoint**
