@@ -1,0 +1,47 @@
+model:
+  target: ldm.models.diffusion.ddpm.LFDM
+  params:
+    linear_start: 0.0015
+    linear_end: 0.0195
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 100
+    first_stage_key: image
+    cond_stage_key: class_label
+    image_size: 1
+    channels: 256
+    cond_stage_trainable: true
+    conditioning_key: crossattn
+    parameterization: x0
+    ckpt_path:  efficientnet-b4-6ed6700e.pth #/Your_path/efficientnet-b4-6ed6700e.pth
+    indices: [24, 56, 112, 272, 720]  # EfficientNet_B4
+    # ResNet-50 indices: [256, 768, 1792]--[1,2,3]
+    unet_config:
+      target: ldm.modules.diffusionmodules.latent.LFDN
+      params:
+        in_channels: 720
+        time_embed_dim: 720 
+        model_channels: 1440
+        bottleneck_channels: 1440
+        out_channels: 720
+        num_res_blocks: 16
+    pretrained_enc_config:
+        - name: backbone
+          type: Pre_train_model.models.backbones.efficientnet_b4
+          frozen: True
+          kwargs:
+            pretrained: True
+            # select outlayers from: resnet [1,2,3,4], efficientnet [1,2,3,4,5]
+            # empirically, for industrial: resnet [1,2,3] or [2,3], efficientnet [1,2,3,4] or [2,3,4]
+            outlayers: [1,2,3,4,5]
+        - name: neck
+          prev: backbone
+          type: Pre_train_model.models.necks.MFCN
+          kwargs:
+            outstrides: [16]     
+    cond_stage_config:
+      target: ldm.modules.encoders.modules.ClassEmbedder
+      params:
+        embed_dim: 720
+        n_classes: 1
+        key: class_label
