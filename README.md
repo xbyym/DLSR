@@ -35,78 +35,78 @@ To ensure compatibility and reproduce the results, please set up your environmen
    ```
 ## Usage
 
-To train a model on datasets such as CIFAR10:
+### To Train a Model on Datasets such as CIFAR10:
 
-1. **Download the Pre-trained Checkpoint**:  
+1. **Download the Pre-Trained Checkpoint**  
    Please download the `efficientnet-b4-6ed6700e.pth` file from [this link](your-pan-link-here) and place it in the current project directory.
 
-2. **Run the Training Script**:
+2. **Run the Training Script**  
    You can start training by running the `main.py` script:
    ```bash
    python main.py --config config/Config.yaml --data_path ./data
    ```
-3. **Multi-GPU Trainin**:
-   If you wish to utilize multiple GPUs, you can use torchrun as follows:
+
+3. **Multi-GPU Training**  
+   If you wish to utilize multiple GPUs, you can use `torchrun` as follows:
    ```bash
    torchrun --nproc_per_node=<number_of_gpus> main.py --config config/Config.yaml --data_path ./data
    ```
-To evaluate the model for out-of-distribution (OOD) detection using datasets like CIFAR10, follow these steps:
 
-### 1. **Download the Pre-trained Checkpoint**
+---
 
-- Download the pre-trained model checkpoint from [this link](your-pretrained-weight-link) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
+### To Evaluate the Model for Out-of-Distribution (OOD) Detection:
 
-### 2. **Prepare OOD Datasets**
+1. **Download the Pre-Trained Checkpoint**  
+   Download the pre-trained model checkpoint from [this link](your-pretrained-weight-link) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
 
-- Download the OOD datasets from [this link](your-dataset-link).
-- Extract and place the datasets inside the `data` folder in your current project directory.
-- The dataset paths need to be specified as follows in the configuration:
-  - CIFAR100: Default will be downloaded automatically.
-  - iSUN: `/data/iSUN`
-  - SVHN: `/data/SVHN`
-  - LSUN: `/data/LSUN`
-  - LSUN (resized): `/data/LSUN_resize`
-  - DTD (Describable Textures Dataset): `/data/dtd/images`
-  - Places365: `/data/places365`
+2. **Prepare OOD Datasets**  
+   - Download the OOD datasets from [this link](your-dataset-link).
+   - Extract and place the datasets inside the `data` folder in your current project directory.
+   - Specify dataset paths as follows in the configuration:
+     - **CIFAR100**: Default will be downloaded automatically.
+     - **iSUN**: `/data/iSUN`
+     - **SVHN**: `/data/SVHN`
+     - **LSUN**: `/data/LSUN`
+     - **LSUN (resized)**: `/data/LSUN_resize`
+     - **DTD (Describable Textures Dataset)**: `/data/dtd/images`
+     - **Places365**: `/data/places365`
 
-Ensure you adjust these paths in `main.py` where the datasets are being loaded.
+   Ensure that you adjust these paths in `main.py` where the datasets are being loaded:
+   ```python
+   # Example Paths to Set
+   dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
+   dataset_test1 = datasets.ImageFolder(root='./data/iSUN', transform=transform_train)
+   dataset_test2 = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=transform_train)
+   dataset_test3 = datasets.ImageFolder(root='./data/LSUN', transform=transform_train)
+   dataset_test4 = datasets.ImageFolder(root='./data/LSUN_resize', transform=transform_train)
+   dataset_test5 = datasets.ImageFolder(root='./data/dtd/images', transform=transform_train)
+   dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
+   ```
 
-```python
-# Example Paths to Set
-dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
-dataset_test1 = datasets.ImageFolder(root='./data/iSUN', transform=transform_train)
-dataset_test2 = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=transform_train)
-dataset_test3 = datasets.ImageFolder(root='./data/LSUN', transform=transform_train)
-dataset_test4 = datasets.ImageFolder(root='./data/LSUN_resize', transform=transform_train)
-dataset_test5 = datasets.ImageFolder(root='./data/dtd/images', transform=transform_train)
-dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
-```
+3. **Run the Evaluation Script**  
+   To evaluate the model, use the `main.py` script as follows:
 
-### 3. **Run the Evaluation Script**
+   - Specify the LDM checkpoint (`--pretrained_ldm_ckpt`) and configuration (`--pretrained_ldm_cfg`):
+     ```bash
+     python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate
+     ```
 
-To evaluate the model, use the `main.py` script as follows:
+   - You can choose to calculate OOD detection metrics using either **MSE** or **MFsim**. To do so, specify `--similarity_type`:
+     - **MSE**:
+       ```bash
+       python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MSE
+       ```
+     - **MFsim**:
+       ```bash
+       python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+       ```
 
-- Make sure to specify the LDM checkpoint (`--pretrained_ldm_ckpt`) and configuration (`--pretrained_ldm_cfg`):
+   - To evaluate the model using the **LR** metric, you need to specify both the initial (`--pretrained_ldm_ckpt_first`) and the end (`--pretrained_ldm_ckpt_end`) pre-trained checkpoints, along with the configuration file:
+     ```bash
+     python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+     ```
 
-  ```bash
-  python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate
-  ```
 
-- You can choose to calculate OOD detection metrics using either **MSE** or **MFsim**. To do so, specify `--similarity_type`:
-
-  - To use **MSE**:
-    ```bash
-    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MSE
-    ```
-  - To use **MFsim**:
-    ```bash
-    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
-    ```
-- To evaluate the model using the **LR** metric, you need to specify both the initial (--pretrained_ldm_ckpt_first) and the end (--pretrained_ldm_ckpt_end) pre-trained checkpoints, as well as the configuration file:
-  ```bash
-  python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg 
-  config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
-  ```
 ## Acknowledgement
 
 This code is primarily based on modifications made from [latent-diffusion](https://github.com/CompVis/latent-diffusion) and [UniAD](https://github.com/zhiyuanyou/UniAD). We would like to express our gratitude to the authors of these repositories for their excellent foundational work, which significantly inspired and supported our research. Their contributions have been invaluable in the development of this project.
