@@ -52,9 +52,9 @@ To ensure compatibility and reproduce the results, please set up your environmen
 
 ### To Evaluate the Model for Out-of-Distribution (OOD) Detection:
 
-#### 1. **Download the Pre-Trained Checkpoints**
+#### 1. **Download the LFDN Checkpoints**
 
-Download the pre-trained model checkpoints from the following links and place them under the `/checkpoint/` directory within the current project folder. **Note:** You do not need to rename these files.
+Download the LFDN checkpoints from the following links and place them under the `/checkpoint/` directory within the current project folder. **Note**: You can rename the files if using different pre-trained models.
 
 - **EfficientNet Pre-trained Models**:
 
