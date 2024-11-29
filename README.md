@@ -1,23 +1,15 @@
 # Diffusion-based Multi-layer Semantic Reconstruction for Unsupervised Out-of-Distribution Detection
-This is the official repo for 
 
-[Diffusion-based Multi-layer Semantic Reconstruction for Unsupervised Out-of-Distribution Detection ](https://arxiv.org/abs/2411.10701)(NeurIPS 2024)
+This is the official repo for
 
-![description](./5-21g1_00.png)
+[Diffusion-based Multi-layer Semantic Reconstruction for Unsupervised Out-of-Distribution Detection](https://arxiv.org/abs/2411.10701) (NeurIPS 2024)
+
+
 
 ## Abstract
 
-Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain data by learning only from unlabeled In-Distribution (ID) training samples, which is crucial for developing a safe real-world machine learning system. Current reconstruction-based method provides a good alternative approach, by measuring the reconstruction error between the input and its corresponding generative counterpart in the pixel/feature space. However, such generative methods face the key dilemma, $i.e.$, *improving the reconstruction power of the generative model, while keeping compact representation of the ID data.* To address this issue, we propose the diffusion-based layer-wise semantic reconstruction approach for unsupervised OOD detection. The innovation of our approach is that we leverage the diffusion model's intrinsic data reconstruction ability to distinguish ID samples from OOD samples in the latent feature space. Moreover, to set up a comprehensive and discriminative feature representation, we devise a multi-layer semantic feature extraction strategy. Through distorting the extracted features with Gaussian noises and applying the diffusion model for feature reconstruction, the separation of ID and OOD samples is implemented according to the reconstruction errors. Extensive experimental results on multiple benchmarks built upon various datasets demonstrate that our method achieves state-of-the-art performance in terms of detection accuracy and speed.
+Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain data by learning only from unlabeled In-Distribution (ID) training samples, which is crucial for developing a safe real-world machine learning system. Current reconstruction-based method provides a good alternative approach, by measuring the reconstruction error between the input and its corresponding generative counterpart in the pixel/feature space. However, such generative methods face the key dilemma, \$i.e.\$, *improving the reconstruction power of the generative model, while keeping compact representation of the ID data.* To address this issue, we propose the diffusion-based layer-wise semantic reconstruction approach for unsupervised OOD detection. The innovation of our approach is that we leverage the diffusion model's intrinsic data reconstruction ability to distinguish ID samples from OOD samples in the latent feature space. Moreover, to set up a comprehensive and discriminative feature representation, we devise a multi-layer semantic feature extraction strategy. Through distorting the extracted features with Gaussian noises and applying the diffusion model for feature reconstruction, the separation of ID and OOD samples is implemented according to the reconstruction errors. Extensive experimental results on multiple benchmarks built upon various datasets demonstrate that our method achieves state-of-the-art performance in terms of detection accuracy and speed.
 
-## Citation
- ```sh
-@article{yang2024diffusion,
-  title={Diffusion-based Layer-wise Semantic Reconstruction for Unsupervised Out-of-Distribution Detection},
-  author={Yang, Ying and Cheng, De and Fang, Chaowei and Wang, Yubiao and Jiao, Changzhe and Cheng, Lechao and Wang, Nannan},
-  journal={arXiv preprint arXiv:2411.10701},
-  year={2024}
-}
- ```
 ## Environment
 
 To ensure compatibility and reproduce the results, please set up your environment using the provided `environment.txt` file.
@@ -33,21 +25,30 @@ To ensure compatibility and reproduce the results, please set up your environmen
    ```sh
    conda activate <your_environment_name>
    ```
+
 ## Usage
 
 ### To Train a Model on Datasets such as CIFAR10:
 
-1. **Download the Pre-Trained Checkpoint**  
-   Please download the `efficientnet-b4-6ed6700e.pth` file from [this link](https://drive.google.com/file/d/1yAQbBQQtiMvhDYWuXTXdGv5uE9enDdKD/view?usp=drive_link) and place it in the current project directory.
+1. **Download the Pre-Trained Checkpoints** Please download the following pre-trained checkpoints and place them in the `/checkpoint/` directory within the current project folder:
 
-2. **Run the Training Script**  
+   - **EfficientNet Pre-trained Models**:
+     - [CIFAR-10 EfficientNet Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): `/checkpoint/checkpoint-last-cifar10.pth`
+     - [CIFAR-100 EfficientNet Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): `/checkpoint/checkpoint-last-cifar100.pth`
+   - **ResNet-50 Pre-trained Models**:
+     - [CIFAR-10 ResNet-50 Model](https://drive.google.com/file/d/14ABPzI-TI-N6wyp9dCYD9bC6V_7y3vA3/view?usp=drive_link): `/checkpoint/checkpoint-resnet50-cifar10.pth`
+     - [CIFAR-100 ResNet-50 Model](https://drive.google.com/file/d/1cNvRsIG-SMuPkkh5oxSPa3w6fXjSkdrt/view?usp=drive_link): `/checkpoint/checkpoint-resnet50-cifar100.pth`
+
+2. **Run the Training Script**\
    You can start training by running the `main.py` script:
+
    ```bash
    python main.py --config config/Config.yaml --data_path ./data
    ```
 
-3. **Multi-GPU Training**  
+3. **Multi-GPU Training**\
    If you wish to utilize multiple GPUs, you can use `torchrun` as follows:
+
    ```bash
    torchrun --nproc_per_node=<number_of_gpus> main.py --config config/Config.yaml --data_path ./data
    ```
@@ -56,63 +57,74 @@ To ensure compatibility and reproduce the results, please set up your environmen
 
 ### To Evaluate the Model for Out-of-Distribution (OOD) Detection:
 
-1. **Download the Pre-Trained Checkpoint**  
-   Download the pre-trained model checkpoint from [this link]([your-pretrained-weight-link](https://drive.google.com/file/d/1yAQbBQQtiMvhDYWuXTXdGv5uE9enDdKD/view?usp=drive_link)) and place it under `/checkpoint/checkpoint-last.pth` within the current project directory.
+### 1. **Download the Pre-Trained Checkpoints**
 
-2. **Prepare OOD Datasets**  
-   - Download the OOD datasets from [this link](your-dataset-link).
-   - Extract and place the datasets inside the `data` folder in your current project directory.
-   - Specify dataset paths as follows in the configuration:
-     - **CIFAR100**: Default will be downloaded automatically.
-     - **iSUN**: `/data/iSUN`
-     - **SVHN**: `/data/SVHN`
-     - **LSUN**: `/data/LSUN`
-     - **LSUN (resized)**: `/data/LSUN_resize`
-     - **DTD (Describable Textures Dataset)**: `/data/dtd/images`
-     - **Places365**: `/data/places365`
+Download the pre-trained model checkpoints from the following links and place them under the `/checkpoint/` directory within the current project folder. Make sure to name each checkpoint accordingly for easier identification:
 
-   Ensure that you adjust these paths in `test_mse_mfsim.py` where the datasets are being loaded:
-   ```python
-   # Example Paths to Set
-   dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
-   dataset_test1 = datasets.ImageFolder(root='./data/iSUN', transform=transform_train)
-   dataset_test2 = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=transform_train)
-   dataset_test3 = datasets.ImageFolder(root='./data/LSUN', transform=transform_train)
-   dataset_test4 = datasets.ImageFolder(root='./data/LSUN_resize', transform=transform_train)
-   dataset_test5 = datasets.ImageFolder(root='./data/dtd/images', transform=transform_train)
-   dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
-   ```
+- **EfficientNet Pre-trained Models**:
 
-3. **Run the Evaluation Script**  
-   To evaluate the model, use the `main.py` script as follows:
+  - CIFAR-10 Pre-trained Model: This is the pre-trained EfficientNet model for CIFAR-10. After downloading, place it under `/checkpoint/checkpoint-last-cifar10.pth`.
+  - CIFAR-100 Pre-trained Model: This is the pre-trained EfficientNet model for CIFAR-100. After downloading, place it under `/checkpoint/checkpoint-last-cifar100.pth`.
 
-   - Specify the LDM checkpoint (`--pretrained_ldm_ckpt`) and configuration (`--pretrained_ldm_cfg`):
-     ```bash
-     python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate
-     ```
+- **ResNet-50 Pre-trained Models**:
 
-   - You can choose to calculate OOD detection metrics using either **MSE** or **MFsim**. To do so, specify `--similarity_type`:
-     - **MSE**:
-       ```bash
-       python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MSE
-       ```
-     - **MFsim**:
-       ```bash
-       python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
-       ```
+  - CIFAR-10 Pre-trained Model: This is the pre-trained ResNet-50 model for CIFAR-10. After downloading, place it under `/checkpoint/checkpoint-resnet50-cifar10.pth`.
+  - CIFAR-100 Pre-trained Model: This is the pre-trained ResNet-50 model for CIFAR-100. After downloading, place it under `/checkpoint/checkpoint-resnet50-cifar100.pth`.
 
-   - To evaluate the model using the **LR** metric, you need to specify both the initial (`--pretrained_ldm_ckpt_first`) and the end (`--pretrained_ldm_ckpt_end`) pre-trained checkpoints, along with the configuration file:
-     ```bash
-     python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
-     ```
+Ensure that you organize these files properly in the `/checkpoint/` directory to easily use them when running experiments.
 
+### 2. **Prepare OOD Datasets**
+
+- Download the OOD datasets from [this link](your-dataset-link).
+- Extract and place the datasets inside the `data` folder in your current project directory.
+- Specify dataset paths as follows in the configuration:
+  - **CIFAR100**: Default will be downloaded automatically.
+  - **iSUN**: `/data/iSUN`
+  - **SVHN**: `/data/SVHN`
+  - **LSUN**: `/data/LSUN`
+  - **LSUN (resized)**: `/data/LSUN_resize`
+  - **DTD (Describable Textures Dataset)**: `/data/dtd/images`
+  - **Places365**: `/data/places365`
+    Ensure that you adjust these paths in `test_mse_mfsim.py` where the datasets are being loaded:
+  ```python
+  # Example Paths to Set
+  dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
+  dataset_test1 = datasets.ImageFolder(root='./data/iSUN', transform=transform_train)
+  dataset_test2 = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=transform_train)
+  dataset_test3 = datasets.ImageFolder(root='./data/LSUN', transform=transform_train)
+  dataset_test4 = datasets.ImageFolder(root='./data/LSUN_resize', transform=transform_train)
+  dataset_test5 = datasets.ImageFolder(root='./data/dtd/images', transform=transform_train)
+  dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
+  ```
+
+### 3. **Run the Evaluation Script**
+
+To evaluate the model, use the `main.py` script as follows:
+
+- Specify the LDM checkpoint (`--pretrained_ldm_ckpt`) and configuration (`--pretrained_ldm_cfg`):
+
+  ```bash
+  python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate
+  ```
+
+- You can choose to calculate OOD detection metrics using either **MSE** or **MFsim**. To do so, specify `--similarity_type`:
+
+  - **MSE**:
+    ```bash
+    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MSE
+    ```
+  - **MFsim**:
+    ```bash
+    python test_mse_mfsim.py --pretrained_ldm_ckpt ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+    ```
+
+- To evaluate the model using the **LR** metric, you need to specify both the initial (`--pretrained_ldm_ckpt_first`) and the end (`--pretrained_ldm_ckpt_end`) pre-trained checkpoints, along with the configuration file:
+
+  ```bash
+  python test_LR.py --pretrained_ldm_ckpt_first ./checkpoint/checkpoint-0.pth --pretrained_ldm_ckpt_end ./checkpoint/checkpoint-last.pth --pretrained_ldm_cfg config/Config.yaml --data_path ./data --evaluate --similarity_type MFsim
+  ```
 
 ## Acknowledgement
 
 This code is primarily based on modifications made from [latent-diffusion](https://github.com/CompVis/latent-diffusion) and [UniAD](https://github.com/zhiyuanyou/UniAD). We would like to express our gratitude to the authors of these repositories for their excellent foundational work, which significantly inspired and supported our research. Their contributions have been invaluable in the development of this project.
 
-
-
-
-
-   
