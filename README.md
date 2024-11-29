@@ -4,11 +4,9 @@ This is the official repo for
 
 [Diffusion-based Multi-layer Semantic Reconstruction for Unsupervised Out-of-Distribution Detection](https://arxiv.org/abs/2411.10701) (NeurIPS 2024)
 
-
-
 ## Abstract
 
-Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain data by learning only from unlabeled In-Distribution (ID) training samples, which is crucial for developing a safe real-world machine learning system. Current reconstruction-based method provides a good alternative approach, by measuring the reconstruction error between the input and its corresponding generative counterpart in the pixel/feature space. However, such generative methods face the key dilemma, \$i.e.\$, *improving the reconstruction power of the generative model, while keeping compact representation of the ID data.* To address this issue, we propose the diffusion-based layer-wise semantic reconstruction approach for unsupervised OOD detection. The innovation of our approach is that we leverage the diffusion model's intrinsic data reconstruction ability to distinguish ID samples from OOD samples in the latent feature space. Moreover, to set up a comprehensive and discriminative feature representation, we devise a multi-layer semantic feature extraction strategy. Through distorting the extracted features with Gaussian noises and applying the diffusion model for feature reconstruction, the separation of ID and OOD samples is implemented according to the reconstruction errors. Extensive experimental results on multiple benchmarks built upon various datasets demonstrate that our method achieves state-of-the-art performance in terms of detection accuracy and speed.
+Unsupervised out-of-distribution (OOD) detection aims to identify out-of-domain data by learning only from unlabeled In-Distribution (ID) training samples, which is crucial for developing a safe real-world machine learning system. Current reconstruction-based methods provide a good alternative approach by measuring the reconstruction error between the input and its corresponding generative counterpart in the pixel/feature space. However, such generative methods face the key dilemma, \$i.e.\$, *improving the reconstruction power of the generative model while keeping a compact representation of the ID data.* To address this issue, we propose the diffusion-based layer-wise semantic reconstruction approach for unsupervised OOD detection. The innovation of our approach is that we leverage the diffusion model's intrinsic data reconstruction ability to distinguish ID samples from OOD samples in the latent feature space. Moreover, to set up a comprehensive and discriminative feature representation, we devise a multi-layer semantic feature extraction strategy. By distorting the extracted features with Gaussian noises and applying the diffusion model for feature reconstruction, the separation of ID and OOD samples is implemented according to the reconstruction errors. Extensive experimental results on multiple benchmarks built upon various datasets demonstrate that our method achieves state-of-the-art performance in terms of detection accuracy and speed.
 
 ## Environment
 
@@ -30,14 +28,8 @@ To ensure compatibility and reproduce the results, please set up your environmen
 
 ### To Train a Model on Datasets such as CIFAR10:
 
-1. **Download the Pre-Trained Checkpoints** Please download the following pre-trained checkpoints and place them in the `/checkpoint/` directory within the current project folder:
-
-   - **EfficientNet Pre-trained Models**:
-     - [CIFAR-10 EfficientNet Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): `/checkpoint/checkpoint-last-cifar10.pth`
-     - [CIFAR-100 EfficientNet Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): `/checkpoint/checkpoint-last-cifar100.pth`
-   - **ResNet-50 Pre-trained Models**:
-     - [CIFAR-10 ResNet-50 Model](https://drive.google.com/file/d/14ABPzI-TI-N6wyp9dCYD9bC6V_7y3vA3/view?usp=drive_link): `/checkpoint/checkpoint-resnet50-cifar10.pth`
-     - [CIFAR-100 ResNet-50 Model](https://drive.google.com/file/d/1cNvRsIG-SMuPkkh5oxSPa3w6fXjSkdrt/view?usp=drive_link): `/checkpoint/checkpoint-resnet50-cifar100.pth`
+1. **Download the Pre-Trained Checkpoint**\
+   Please download the `efficientnet-b4-6ed6700e.pth` file from [this link](https://drive.google.com/file/d/1yAQbBQQtiMvhDYWuXTXdGv5uE9enDdKD/view?usp=drive_link) and place it in the current project directory.
 
 2. **Run the Training Script**\
    You can start training by running the `main.py` script:
@@ -57,23 +49,23 @@ To ensure compatibility and reproduce the results, please set up your environmen
 
 ### To Evaluate the Model for Out-of-Distribution (OOD) Detection:
 
-### 1. **Download the Pre-Trained Checkpoints**
+#### 1. **Download the Pre-Trained Checkpoints**
 
-Download the pre-trained model checkpoints from the following links and place them under the `/checkpoint/` directory within the current project folder. Make sure to name each checkpoint accordingly for easier identification:
+Download the pre-trained model checkpoints from the following links and place them under the `/checkpoint/` directory within the current project folder. **Note:** You do not need to rename these files.
 
 - **EfficientNet Pre-trained Models**:
 
-  - CIFAR-10 Pre-trained Model: This is the pre-trained EfficientNet model for CIFAR-10. After downloading, place it under `/checkpoint/checkpoint-last-cifar10.pth`.
-  - CIFAR-100 Pre-trained Model: This is the pre-trained EfficientNet model for CIFAR-100. After downloading, place it under `/checkpoint/checkpoint-last-cifar100.pth`.
+  - [CIFAR-10 Pre-trained Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): After downloading, place it under `/checkpoint/checkpoint-0.pth`.
+  - [CIFAR-100 Pre-trained Model](https://drive.google.com/file/d/1gHCo53lsiUpFVdKt-XIKV8v7vingNfNp/view?usp=sharing): After downloading, place it under `/checkpoint/checkpoint-last.pth`.
 
 - **ResNet-50 Pre-trained Models**:
 
-  - CIFAR-10 Pre-trained Model: This is the pre-trained ResNet-50 model for CIFAR-10. After downloading, place it under `/checkpoint/checkpoint-resnet50-cifar10.pth`.
-  - CIFAR-100 Pre-trained Model: This is the pre-trained ResNet-50 model for CIFAR-100. After downloading, place it under `/checkpoint/checkpoint-resnet50-cifar100.pth`.
+  - [CIFAR-10 Pre-trained Model](https://drive.google.com/file/d/14ABPzI-TI-N6wyp9dCYD9bC6V_7y3vA3/view?usp=drive_link): After downloading, place it under `/checkpoint/checkpoint-0.pth`.
+  - [CIFAR-100 Pre-trained Model](https://drive.google.com/file/d/1cNvRsIG-SMuPkkh5oxSPa3w6fXjSkdrt/view?usp=drive_link): After downloading, place it under `/checkpoint/checkpoint-last.pth`.
 
 Ensure that you organize these files properly in the `/checkpoint/` directory to easily use them when running experiments.
 
-### 2. **Prepare OOD Datasets**
+#### 2. **Prepare OOD Datasets**
 
 - Download the OOD datasets from [this link](your-dataset-link).
 - Extract and place the datasets inside the `data` folder in your current project directory.
@@ -85,7 +77,7 @@ Ensure that you organize these files properly in the `/checkpoint/` directory to
   - **LSUN (resized)**: `/data/LSUN_resize`
   - **DTD (Describable Textures Dataset)**: `/data/dtd/images`
   - **Places365**: `/data/places365`
-    Ensure that you adjust these paths in `test_mse_mfsim.py` where the datasets are being loaded:
+  Ensure that you adjust these paths in `test_mse_mfsim.py` where the datasets are being loaded:
   ```python
   # Example Paths to Set
   dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
@@ -97,7 +89,7 @@ Ensure that you organize these files properly in the `/checkpoint/` directory to
   dataset_test6 = datasets.ImageFolder(root='./data/places365', transform=transform_train)
   ```
 
-### 3. **Run the Evaluation Script**
+#### 3. **Run the Evaluation Script**
 
 To evaluate the model, use the `main.py` script as follows:
 
