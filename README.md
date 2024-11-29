@@ -71,7 +71,7 @@ To ensure compatibility and reproduce the results, please set up your environmen
      - **DTD (Describable Textures Dataset)**: `/data/dtd/images`
      - **Places365**: `/data/places365`
 
-   Ensure that you adjust these paths in `main.py` where the datasets are being loaded:
+   Ensure that you adjust these paths in `test_mse_mfsim.py` where the datasets are being loaded:
    ```python
    # Example Paths to Set
    dataset_test0 = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_train)
