@@ -67,7 +67,7 @@ Ensure that you organize these files properly in the `/checkpoint/` directory to
 
 #### 2. **Prepare OOD Datasets**
 
-- Download the OOD datasets from [this link](your-dataset-link).
+- Download the OOD datasets from [this link](https://drive.google.com/file/d/1uTtyywjKurfQnQG9jFjYVKjUFthUI8Qd/view?usp=drive_link).
 - Extract and place the datasets inside the `data` folder in your current project directory.
 - Specify dataset paths as follows in the configuration:
   - **CIFAR100**: Default will be downloaded automatically.
